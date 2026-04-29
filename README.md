@@ -1,36 +1,173 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pokedex Frontend
 
-## Getting Started
+Aplicacion web tipo Pokedex construida con Next.js 16 y React 19 que consume la [PokeAPI](https://pokeapi.co/) publica. Permite explorar Pokemon, movimientos, objetos, ubicaciones, habitats y tipos, con rutas dinamicas anidadas, estados de carga y manejo de errores por segmento.
 
-First, run the development server:
+---
+
+## Requisitos
+
+- Node.js 18 o superior
+- npm 9 o superior (incluido con Node.js)
+- Conexion a internet (la app consume la PokeAPI en tiempo real)
+
+---
+
+## Instalacion
+
+1. Clona el repositorio:
+
+```bash
+git clone https://github.com/Abisaac1809/Frontend-PokeApi.git
+cd Frontend-PokeApi
+```
+
+2. Instala las dependencias:
+
+```bash
+npm install
+```
+
+3. Inicia el servidor de desarrollo:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Scripts disponibles
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Comando | Descripcion |
+|---|---|
+| `npm run dev` | Servidor de desarrollo con Turbopack |
+| `npm run build` | Genera el build de produccion |
+| `npm run start` | Inicia el servidor en modo produccion |
+| `npm run lint` | Ejecuta ESLint |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Arquitectura de carpetas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/                        # App Router de Next.js (rutas y paginas)
+│   ├── layout.tsx              # Layout raiz (NavBar, fuentes, metadatos globales)
+│   ├── page.tsx                # Pagina de inicio
+│   ├── globals.css             # Tokens de diseno y estilos globales (tema oscuro)
+│   │
+│   ├── pokemon/                # /pokemon
+│   │   ├── page.tsx            # Listado de Pokemon
+│   │   ├── loading.tsx
+│   │   ├── error.tsx
+│   │   └── [id]/               # /pokemon/:id
+│   │       ├── page.tsx        # Detalle de Pokemon
+│   │       ├── loading.tsx
+│   │       └── error.tsx
+│   │
+│   ├── moves/                  # /moves
+│   │   ├── page.tsx            # Listado de tipos de movimientos
+│   │   ├── loading.tsx
+│   │   ├── error.tsx
+│   │   └── [typeName]/         # /moves/:typeName
+│   │       ├── page.tsx
+│   │       ├── loading.tsx
+│   │       └── error.tsx
+│   │
+│   ├── items/                  # /items
+│   │   ├── page.tsx            # Listado de categorias de objetos
+│   │   ├── loading.tsx
+│   │   ├── error.tsx
+│   │   └── [categoryName]/     # /items/:categoryName
+│   │       ├── page.tsx
+│   │       ├── loading.tsx
+│   │       ├── error.tsx
+│   │       └── [itemId]/       # /items/:categoryName/:itemId
+│   │           ├── page.tsx
+│   │           ├── loading.tsx
+│   │           └── error.tsx
+│   │
+│   ├── locations/              # /locations
+│   │   ├── page.tsx            # Listado de regiones
+│   │   ├── loading.tsx
+│   │   ├── error.tsx
+│   │   └── [regionId]/         # /locations/:regionId
+│   │       ├── page.tsx
+│   │       ├── loading.tsx
+│   │       ├── error.tsx
+│   │       └── [locationId]/   # /locations/:regionId/:locationId
+│   │           ├── page.tsx
+│   │           ├── loading.tsx
+│   │           └── error.tsx
+│   │
+│   ├── habitat/                # /habitat
+│   │   ├── page.tsx
+│   │   ├── loading.tsx
+│   │   ├── error.tsx
+│   │   └── [habitatName]/      # /habitat/:habitatName
+│   │       ├── page.tsx
+│   │       ├── loading.tsx
+│   │       └── error.tsx
+│   │
+│   └── pokemon-types/          # /pokemon-types
+│       ├── page.tsx
+│       ├── loading.tsx
+│       ├── error.tsx
+│       └── [typeName]/         # /pokemon-types/:typeName
+│           ├── page.tsx
+│           ├── loading.tsx
+│           └── error.tsx
+│
+├── components/                 # Componentes de UI reutilizables
+│   ├── nav/
+│   │   └── NavBar.tsx
+│   ├── layout/
+│   │   ├── CardGrid.tsx        # Contenedor de cuadricula responsiva
+│   │   └── SectionHeader.tsx
+│   ├── controls/
+│   │   ├── SearchBar.tsx
+│   │   └── Pagination.tsx
+│   ├── feedback/
+│   │   ├── CardSkeleton.tsx
+│   │   ├── CardGridSkeleton.tsx
+│   │   └── ErrorState.tsx
+│   ├── pokemon/                # Componentes especificos de Pokemon
+│   │   ├── PokemonCard.tsx
+│   │   ├── PokemonHero.tsx
+│   │   ├── StatBar.tsx
+│   │   ├── StatList.tsx
+│   │   ├── TypeBadge.tsx
+│   │   ├── FlavorText.tsx
+│   │   ├── EvolutionChain.tsx
+│   │   ├── EvolutionNode.tsx
+│   │   └── EncounterTableByArea.tsx
+│   ├── moves/
+│   │   └── MoveCard.tsx
+│   ├── items/
+│   │   ├── ItemCard.tsx
+│   │   └── ItemCategoryCard.tsx
+│   ├── locations/
+│   │   ├── RegionCard.tsx
+│   │   ├── LocationCard.tsx
+│   │   ├── LocationAreaPanel.tsx
+│   │   └── EncounterTableByPokemon.tsx
+│   ├── habitat/
+│   │   └── HabitatCard.tsx
+│   └── types/
+│       └── TypeCard.tsx
+│
+├── lib/                        # Capa de datos y utilidades
+│   ├── client.ts               # Fetch base hacia la PokeAPI
+│   ├── pokemon.ts              # Fetchers de Pokemon
+│   ├── moves.ts                # Fetchers de movimientos
+│   ├── items.ts                # Fetchers de objetos
+│   ├── locations.ts            # Fetchers de ubicaciones
+│   ├── type-colors.ts          # Mapa de colores por tipo de Pokemon
+│   └── utils.ts                # Funciones de utilidad generales
+│
+└── types/                      # Tipos TypeScript
+    ├── pokemon.ts
+    ├── move.ts
+    ├── item.ts
+    ├── location.ts
+    └── shared.ts               # Tipos compartidos (NamedAPIResource, etc.)
+```
